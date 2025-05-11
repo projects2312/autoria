@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  redis:
+    image: redis:alpine
+    container_name: redis
+
+  celery:
+    build: .
+    container_name: celery
+    command: bash -c "alembic upgrade head && celery -A celery_app worker -l info -P eventlet"
+    depends_on:
+      - redis
+      - db
+
+  celery_beat:
+    build: .
+    container_name: celery_beat
+    command: celery -A celery_app beat -l info
+    depends_on:
+      - redis
+      - db
+
+  db:
+    image: postgres:13
+    container_name: db
+    environment:
+      DB_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  selenium:
+    image: selenium/standalone-chromium:latest
+    container_name: selenium
+    ports:
+      - "4444:4444"
+    shm_size: 2g
+
+volumes:
+  postgres_data:
+    driver: local
