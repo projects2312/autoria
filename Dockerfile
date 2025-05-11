@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
     libxrandr2 \
     libglu1-mesa \
     postgresql-client \
+    netcat-openbsd \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -22,5 +23,7 @@ ENV CHROME_BIN=/usr/bin/chromium
 ENV DISPLAY=:99
 
 COPY . /app/
+
+RUN chmod +x /app/wait_for_db.sh
 
 EXPOSE 8000
