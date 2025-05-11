@@ -37,7 +37,7 @@ git clone https://github.com/projects2312/autoria.git
 3. Виконайте:
 
 ```bash
-docker-compose --build
+docker-compose up --build
 ```
 
 ## Структура
