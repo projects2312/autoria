@@ -58,4 +58,5 @@ docker-compose up --build
 ├── .env                        # Environment variables
 ├── dumps/                     
 └── README.md
+└── wait_for_db.sh              # Database Availability Wait Script
 ```
