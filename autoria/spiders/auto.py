@@ -42,7 +42,6 @@ class AutoSpider(scrapy.Spider):
         for auto_url in response.css("a.photo-185x120::attr(href)").getall():
             yield response.follow(auto_url, callback=self.parse_auto)
         next_page = response.css("span.page-item.next.text-r a::attr(href)").get()
-        print(f"Next page -----------------------ББББББББ -> {next_page}")
         if next_page:
             yield response.follow(next_page, callback=self.parse)
 
@@ -56,11 +55,6 @@ class AutoSpider(scrapy.Spider):
             safe_css("div.seller_info_name.bold::text") or
             safe_css("h4.seller_info_name > a::text")
         )
-
-        if not username:
-            self.logger.error(f"❌ Username not found: {response.url}")
-            yield {'info': "NO CAR ANYMORE"}
-            return
 
         images_count_raw = safe_css("span.count > span.mhide::text", strip=True)
         images_count = int(images_count_raw.replace("з ", "")) if images_count_raw else None
